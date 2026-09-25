@@ -18,6 +18,8 @@ jobs:
       - name: Tests
         run: ctest --test-dir build --output-on-failure
       # The test suite doesn't exercise the tools, so run them too.
+      - name: Replay the example session
+        run: ./build/lob_replay examples/sample_session.txt
       - name: Benchmark smoke run
         run: ./build/lob_bench --mode inline --messages 500000 --warmup 50000
 
