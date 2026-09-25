@@ -9,13 +9,22 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+option(LOB_NATIVE "Build with -march=native" OFF)
+
 add_library(lob INTERFACE)
 target_include_directories(lob INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_features(lob INTERFACE cxx_std_20)
 
 set(LOB_WARNINGS -Wall -Wextra -Wpedantic)
+if(LOB_NATIVE)
+  list(APPEND LOB_WARNINGS -march=native)
+endif()
 
 find_package(Threads REQUIRED)
+
+add_executable(lob_bench bench/bench_main.cpp)
+target_link_libraries(lob_bench PRIVATE lob Threads::Threads)
+target_compile_options(lob_bench PRIVATE ${LOB_WARNINGS})
 
 add_executable(lob_tests
   tests/test_main.cpp
