@@ -1,4 +1,4 @@
-// FixedPool and FlatMap unit tests. The FlatMap stress test is
+// FixedPool, FlatMap and Histogram unit tests. The FlatMap stress test is
 // differential: 200k random insert/find/erase ops checked against
 // std::unordered_map, which exercises the backward-shift deletion path hard.
 #include <cstdint>
@@ -6,6 +6,7 @@
 
 #include "harness.hpp"
 #include "lob/flat_map.hpp"
+#include "lob/latency.hpp"
 #include "lob/order_book.hpp"
 #include "lob/pool.hpp"
 
@@ -91,4 +92,31 @@ TEST(flatmap_differential_stress_vs_unordered_map) {
     const std::uint64_t* p = m.find(k);
     CHECK(p != nullptr && *p == v);
   }
+}
+
+TEST(histogram_percentiles_within_quantization_error) {
+  Histogram h;
+  // 1..100000 ns uniformly: p50 ~ 50000, p99 ~ 99000.
+  for (std::uint64_t v = 1; v <= 100000; ++v) h.record(v);
+  CHECK_EQ(h.count(), std::uint64_t(100000));
+  CHECK_EQ(h.min(), std::uint64_t(1));
+  CHECK_EQ(h.max(), std::uint64_t(100000));
+  auto within = [](std::uint64_t got, std::uint64_t want) {
+    const double rel = double(got > want ? got - want : want - got) / double(want);
+    return rel <= 0.05;  // log-linear buckets guarantee <= ~1.6%; allow slack
+  };
+  CHECK(within(h.percentile(50), 50000));
+  CHECK(within(h.percentile(90), 90000));
+  CHECK(within(h.percentile(99), 99000));
+  CHECK(h.percentile(100) == 100000);
+  h.reset();
+  CHECK_EQ(h.count(), std::uint64_t(0));
+  CHECK_EQ(h.percentile(99), std::uint64_t(0));
+}
+
+TEST(histogram_exact_small_values) {
+  Histogram h;
+  for (int i = 0; i < 10; ++i) h.record(7);
+  CHECK_EQ(h.percentile(50), std::uint64_t(7));  // values < 64 are exact
+  CHECK_EQ(h.percentile(99.9), std::uint64_t(7));
 }
