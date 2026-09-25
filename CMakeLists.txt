@@ -22,7 +22,8 @@ add_executable(lob_tests
   tests/test_ring.cpp
   tests/test_pool_map_hist.cpp
   tests/test_engine.cpp
-  tests/test_fuzz.cpp)
+  tests/test_fuzz.cpp
+  tests/test_no_alloc.cpp)
 target_link_libraries(lob_tests PRIVATE lob Threads::Threads)
 target_compile_options(lob_tests PRIVATE ${LOB_WARNINGS})
 
