@@ -31,11 +31,9 @@ jobs:
       UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
     steps:
       - uses: actions/checkout@v4
-      - name: Configure
-        run: >-
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-          -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
       - name: Build
-        run: cmake --build build -j
+        run: scripts/build.sh debug
       - name: Tests
         run: ./build/lob_tests
+      - name: Replay the example session
+        run: ./build/lob_replay examples/sample_session.txt
