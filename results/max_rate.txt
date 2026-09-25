@@ -1,0 +1,30 @@
+lob_bench: mode=split messages=10000000 warmup=1000000 rate=0 levels=200000 max_open=1048576 seed=42 bbo=1 event_ts=1 sample=1
+
+==== results (post-warmup) ====
+  engine throughput   1715471 msg/s  (1.715 M msg/s)
+  offered rate        1712308 msg/s
+  measured messages   9000000  over 5.246 s
+  proc latency   n=9000000    p50=303      p90=807      p99=1503     p99.9=4351     max=2593200    mean=463 ns
+  e2e latency    n=9000000    p50=38273023 p90=44040191 p99=48234495 p99.9=49807359 max=49811100   mean=38174190 ns
+
+==== engine counters (full run incl. warmup) ====
+  msgs=10000000 accepted=5598373 rejected=3722469 cancels=525233 expired=233413 replaced=153925
+  trades=4812672 traded_qty=242442658 bbo_updates=2768984 open_at_end=2846
+  producer backpressure spins=2644007 outbound sink spins=0
+
+==== event counters ====
+  total=22627741 accepted=5598373 rejected=3722469 fills=9625344 canceled=758646 replaced=153925 book_top=2768984 fb_dropped=0
+
+==== book at end (top 5) ====
+  ASK   100777  qty=1407     orders=12
+  ASK   100778  qty=3296     orders=32
+  ASK   100779  qty=3374     orders=32
+  ASK   100780  qty=2785     orders=27
+  ASK   100781  qty=1734     orders=24
+  BID   100731  qty=926      orders=7
+  BID   100730  qty=374      orders=4
+  BID   100729  qty=797      orders=7
+  BID   100728  qty=100      orders=1
+  BID   100712  qty=242      orders=3
+wrote results/max_rate.hist.csv
+wrote results/max_rate.json

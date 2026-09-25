@@ -1,0 +1,9 @@
+{
+  "config":{"messages":6000000,"warmup":600000,"rate":1000000,"seed":42,"sample_every":1,"levels":200000,"max_open":1048576,"mode":"split","publish_bbo":true,"stamp_events":true},
+  "results":{"throughput_msgs_per_sec":1000000.0,"measured_msgs":5400000,"elapsed_s":5.4000,"producer_backpressure_spins":0,
+    "proc_latency_ns":{"count":5400000,"p50":303,"p90":903,"p99":1407,"p999":3007,"max":2032200,"mean_ns":420.9},
+    "e2e_latency_ns":{"count":5400000,"p50":703,"p90":8319,"p99":606207,"p999":1966079,"max":3003800,"mean_ns":25828.3},
+    "engine":{"msgs":6000000,"accepted":3432437,"rejected":269576,"user_cancels":1776395,"expired":231907,"replaced":521592,"trades":1416743,"traded_qty":77031113,"bbo_updates":2978014,"open_at_end":12},
+    "events":{"total":12043407,"accepted":3432437,"rejected":269576,"fills":2833486,"canceled":2008302,"replaced":521592,"book_top":2978014,"feedback_dropped":0}
+  }
+}
