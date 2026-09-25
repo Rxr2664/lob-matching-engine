@@ -1,0 +1,23 @@
+# Build a small book, then watch price-time priority do its thing.
+NEW 1 SELL LIMIT 105 10 GTC
+NEW 2 SELL LIMIT 105 5 GTC
+NEW 3 SELL LIMIT 104 7 GTC
+NEW 4 BUY LIMIT 101 20 GTC
+NEW 5 BUY LIMIT 102 8 GTC
+BOOK 5
+# Aggressive buy sweeps the 104 level, then eats into 105 (oldest first).
+NEW 6 BUY LIMIT 105 15 GTC
+BOOK 5
+ORDERS 105
+# Replace keeps priority only for same-price size-downs.
+RPL 5 103 8
+CXL 4
+BOOK 5
+# IOC that cannot cross is canceled in full; FOK is all-or-none.
+NEW 7 BUY LIMIT 100 5 IOC
+NEW 8 BUY LIMIT 105 9 FOK
+NEW 9 BUY LIMIT 105 7 FOK
+BOOK 5
+# Market order sweeps whatever is left on the bid side.
+NEW 10 SELL MARKET 0 25 IOC
+BOOK 5
