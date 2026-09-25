@@ -17,6 +17,9 @@ jobs:
         run: cmake --build build -j
       - name: Tests
         run: ctest --test-dir build --output-on-failure
+      # The test suite doesn't exercise the tools, so run them too.
+      - name: Benchmark smoke run
+        run: ./build/lob_bench --mode inline --messages 500000 --warmup 50000
 
   sanitizers:
     name: ASan + UBSan (GCC, Linux)
